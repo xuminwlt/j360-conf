@@ -10,11 +10,27 @@
     <packaging>war</packaging>
 
     <properties>
-    <fotoplace.version>3.4.0-SNAPSHOT</fotoplace.version>
-    <spring.data.redis.version>1.4.2.RELEASE</spring.data.redis.version>
-    <spring.version>4.1.6.RELEASE</spring.version>
+        <fotoplace.version>3.4.0-SNAPSHOT</fotoplace.version>
+        <spring.data.redis.version>1.4.2.RELEASE</spring.data.redis.version>
+        <spring.version>4.1.6.RELEASE</spring.version>
+        <logback.version>1.1.2</logback.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
 
         <!--test-->
         <dependency>
