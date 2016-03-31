@@ -8,5 +8,10 @@ j360系列配置
 ##简单代码配置分离工具##
 - 依赖Spring配置
 - 对多环境的配置通过引入文件路径进行多个环境的配置支持，让开发人员只关注代码
+- 分别对jar、war工程分开配置
 
 
+##对比##
+- spring boot
+- disconf
+- spring cloud config
