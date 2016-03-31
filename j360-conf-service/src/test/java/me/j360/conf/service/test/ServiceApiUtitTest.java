@@ -1,4 +1,4 @@
-package me.j360.conf.test;
+package me.j360.conf.service.test;
 
 import org.junit.Before;
 import org.junit.Test;

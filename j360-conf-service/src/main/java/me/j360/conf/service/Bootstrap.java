@@ -1,4 +1,4 @@
-package me.j360.conf;
+package me.j360.conf.service;
 
 
 public class Bootstrap {
