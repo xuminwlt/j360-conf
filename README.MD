@@ -19,6 +19,7 @@ j360系列配置
 ##参考##
 - [编程方式] http://www.mojohaus.org/appassembler/appassembler-maven-plugin/usage-program-structure.html
 - [进程守护方式] http://www.mojohaus.org/appassembler/appassembler-maven-plugin/usage-program-arguments.html
+- [plugin插件github地址] https://github.com/mojohaus/appassembler
 
 - [jsw官网] http://wrapper.tanukisoftware.com/doc/english/properties.html
 - [jsw源码地址] https://sourceforge.net/projects/wrapper/files/wrapper_src/Wrapper_3.5.29_20160311/
