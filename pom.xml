@@ -11,6 +11,7 @@
         <module>j360-conf-service</module>
         <module>j360-conf-web</module>
         <module>j360-conf-wrapper-service</module>
+        <module>j360-conf-jsw</module>
     </modules>
     <packaging>pom</packaging>
 
