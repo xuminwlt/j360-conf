@@ -10,6 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>j360-conf-service</artifactId>
+    <properties>
+        <appName>j360-conf-service</appName>
+        <appassembler.directory>${project.build.directory}</appassembler.directory>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -67,57 +71,7 @@
             <artifactId>spring-expression</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-
     </dependencies>
-
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <!--dev环境jetty插件-->
-            <!-- jetty插件, 设定context path与spring profile -->
-            <!-- scanIntervalSeconds设置的是jetty自动扫描的间隔，单位秒 发现有改动自动更新部署，默认为0，即不扫描管理热部署工程。 -->
-            <!-- systemProperties 设置spring配置文件使用 development 开发环境配置 -->
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <configuration>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>spring.profiles.active</name>
-                            <value>dev</value>
-                        </systemProperty>
-                        <systemProperty>
-                            <name>org.mortbay.util.URI.charset</name>
-                            <value>UTF-8</value>
-                        </systemProperty>
-                    </systemProperties>
-                    <useTestClasspath>true</useTestClasspath>
-                    <webAppConfig>
-                        <contextPath>/</contextPath>
-                        <defaultsDescriptor>${project.basedir}/src/test/resources/webdefault.xml
-                        </defaultsDescriptor>
-                        <!--<overrideDescriptor>${project.basedir}/src/test/resources/web.xml</overrideDescriptor>-->
-                    </webAppConfig>
-
-                    <reload>automatic</reload>
-                    <scanIntervalSeconds>0</scanIntervalSeconds>
-                    <contextXml>${project.basedir}/src/test/resources/jetty-context.xml</contextXml>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>8080</port>
-                            <maxIdleTime>60000</maxIdleTime>
-                        </connector>
-                    </connectors>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <profiles>
         <profile>
@@ -125,7 +79,9 @@
             <dependencies>
 
             </dependencies>
+
             <build>
+
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -133,71 +89,104 @@
                         <version>1.8.1</version>
                         <configuration>
                             <repositoryLayout>flat</repositoryLayout>
+                            <generateRepository>true</generateRepository>
                             <repositoryName>lib</repositoryName>
+                            <configurationDirectory>conf</configurationDirectory>
                             <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-                            <copyConfigurationDirectory>src/main/resources</copyConfigurationDirectory>
-                            <target>${project.build.directory}</target>
-                            <daemons>
-                                <daemon>
-                                    <id>j360-conf-service</id>
-                                    <mainClass>me.j360.conf.Bootstrap</mainClass>
-                                    <commandLineArguments>
-                                        <commandLineArgument>start</commandLineArgument>
-                                    </commandLineArguments>
-                                    <platforms>
-                                        <platform>jsw</platform>
-                                    </platforms>
-                                    <generatorConfigurations>
-                                        <generatorConfiguration>
-                                            <generator>jsw</generator>
-                                            <includes>
-                                                <include>linux-x86-32</include>
-                                                <include>linux-x86-64</include>
-                                                <include>windows-x86-32</include>
-                                                <include>windows-x86-64</include>
-                                            </includes>
-                                            <configuration>
-                                                <property>
-                                                    <name>configuration.directory.in.classpath.first</name>
-                                                    <value>etc</value>
-                                                </property>
-                                                <property>
-                                                    <name>set.default.REPO_DIR</name>
-                                                    <value>lib</value>
-                                                </property>
-                                                <property>
-                                                    <name>wrapper.logfile</name>
-                                                    <value>../logs/wrapper.log</value>
-                                                </property>
-                                                <property>
-                                                    <name>run.as.user.envvar</name>
-                                                    <value>root</value>
-                                                </property>
-                                            </configuration>
-                                        </generatorConfiguration>
-                                    </generatorConfigurations>
-                                    <jvmSettings>
-                                        <initialMemorySize>256M</initialMemorySize>
-                                        <maxMemorySize>256M</maxMemorySize>
+                            <environmentSetupFileName>${appName}-env</environmentSetupFileName>
+                            <assembleDirectory>${appassembler.directory}</assembleDirectory>
 
-                                        <extraArguments>
-                                            <extraArgument>-server</extraArgument>
-                                        </extraArguments>
-                                    </jvmSettings>
-                                </daemon>
-                            </daemons>
+
                         </configuration>
                         <executions>
                             <execution>
-                                <id>generate-jsw-scripts</id>
-                                <phase>package</phase>
+                                <id>exe-with-jsw</id>
                                 <goals>
                                     <goal>generate-daemons</goal>
                                 </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <daemons>
+                                        <daemon>
+                                            <id>${appName}</id>
+                                            <mainClass>me.j360.conf.service.Bootstrap</mainClass>
+                                            <platforms>
+                                                <platform>jsw</platform>
+                                            </platforms>
+                                            <generatorConfigurations>
+                                                <generatorConfiguration>
+                                                    <generator>jsw</generator>
+                                                    <configuration>
+                                                        <property>
+                                                            <name>app.base.envvar</name>
+                                                            <value>BASEDIR</value>
+                                                        </property>
+                                                        <property>
+                                                            <name>set.default.REPO_DIR</name>
+                                                            <value>./lib</value>
+                                                        </property>
+                                                        <property>
+                                                            <name>wrapper.logfile</name>
+                                                            <value>%BASEDIR%/logs/wrapper.log</value>
+                                                        </property>
+                                                        <property>
+                                                        </property>
+                                                        <property>
+                                                            <name>wrapper.java.maxmemory</name>
+                                                            <value>128</value>
+                                                        </property>
+                                                        <property>
+                                                            <name>wrapper.console.title</name>
+                                                            <value>${appName}</value>
+                                                        </property>
+                                                        <property>
+                                                            <name>wrapper.ntservice.name</name>
+                                                            <value>${appName}</value>
+                                                        </property>
+                                                        <property>
+                                                            <name>wrapper.ntservice.displayname</name>
+                                                            <value>${appName}</value>
+                                                        </property>
+                                                        <property>
+                                                            <name>wrapper.console.loglevel</name>
+                                                            <value>INFO</value>
+                                                        </property>
+                                                    </configuration>
+                                                    <includes>
+                                                        <include>aix-ppc-32</include>
+                                                        <include>aix-ppc-64</include>
+                                                        <include>hpux-parisc-64</include>
+                                                        <include>linux-x86-32</include>
+                                                        <include>linux-x86-64</include>
+                                                        <include>macosx-universal-32</include>
+                                                        <include>macosx-universal-64</include>
+                                                        <include>solaris-sparc-32</include>
+                                                        <include>solaris-sparc-64</include>
+                                                        <include>windows-x86-32</include>
+                                                        <include>windows-x86-64</include>
+                                                    </includes>
+                                                </generatorConfiguration>
+                                            </generatorConfigurations>
+                                            <jvmSettings>
+                                                <initialMemorySize>128M</initialMemorySize>
+                                                <maxMemorySize>128M</maxMemorySize>
+                                                <extraArguments>
+                                                    <extraArgument>-Xrs</extraArgument>
+                                                </extraArguments>
+                                                <systemProperties>
+                                                    <systemProperty>basedir=%BASEDIR%</systemProperty>
+                                                </systemProperties>
+                                            </jvmSettings>
+                                        </daemon>
+                                    </daemons>
+                                    <target>${appassembler.directory}</target>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
+
                 </plugins>
+
             </build>
         </profile>
     </profiles>

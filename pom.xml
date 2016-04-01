@@ -10,6 +10,7 @@
     <modules>
         <module>j360-conf-service</module>
         <module>j360-conf-web</module>
+        <module>j360-conf-wrapper-service</module>
     </modules>
     <packaging>pom</packaging>
 
