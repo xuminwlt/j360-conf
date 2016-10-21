@@ -12,14 +12,15 @@
         <module>j360-conf-web</module>
         <module>j360-conf-wrapper-service</module>
         <module>j360-conf-jsw</module>
+        <module>j360-conf-nativeboot</module>
+        <module>j360-conf-springboot</module>
     </modules>
     <packaging>pom</packaging>
 
     <properties>
-        <fotoplace.version>3.4.0-SNAPSHOT</fotoplace.version>
-        <spring.data.redis.version>1.4.2.RELEASE</spring.data.redis.version>
         <spring.version>4.1.6.RELEASE</spring.version>
         <logback.version>1.1.2</logback.version>
+        <project.encoding>utf-8</project.encoding>
     </properties>
     <dependencies>
         <dependency>
@@ -80,4 +81,18 @@
     </dependencies>
 
 
+    <build>
+        <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <source>1.7</source>
+                <target>1.7</target>
+                <encoding>${project.encoding}</encoding>
+            </configuration>
+        </plugin>
+        </plugins>
+    </build>
 </project>
